@@ -1,0 +1,61 @@
+
+
+security_rule {
+    name                       = "Allow-HTTP" # This is the name of the security rule. It provides a unique identifier within the network security group for easy reference and management.
+    
+    priority                   = 100 # Defines the rule's priority. Rules are processed in order of priority, from lowest to highest. Lower numbers have higher priority. This value must be unique within the NSG.
+    
+    direction                  = "Inbound" # Specifies the direction of the rule. "Inbound" means the rule applies to incoming traffic to the resources associated with this NSG.
+    
+    access                     = "Allow" # Determines whether the traffic matching the rule is allowed or denied. In this case, "Allow" permits the traffic.
+    
+    protocol                   = "Tcp# Specifies the network protocol to which this rule applies. "Tcp" indicates that the rule applies to TCP traffic.
+    
+    source_port_range          = "*"  # Defines the range of source ports from which traffic is allowed. "*" means any source port is allowed.
+    
+    destination_port_range     = "80" # Specifies the range of destination ports to which traffic is allowed. "80" is the standard port for HTTP traffic, meaning this rule allows traffic to destination port 80.
+    
+    source_address_prefix      = "*"  # Specifies the range of source IP addresses allowed by this rule. "*" means any source IP address is allowed.
+    
+    destination_address_prefix = "*"  # Defines the range of destination IP addresses for which this rule applies. "*" means any destination IP address is allowed.
+}
+
+
+### Detailed Explanation:
+
+1. `name = "Allow-HTTP"`:  
+   - **Purpose**: To give the security rule a unique and descriptive name.
+   - **Goal**: Helps in identifying the purpose of the rule (in this case, to allow HTTP traffic).
+
+2. `priority = 100`:  
+   - **Purpose**: To set the order in which rules are processed.
+   - **Goal**: Ensures that rules with lower priority numbers are evaluated before those with higher numbers, which can affect which rules apply to traffic when multiple rules could match.
+
+3. `direction = "Inbound"`:  
+   - **Purpose**: To specify the direction of network traffic the rule applies to.
+   - **Goal**: This rule applies to traffic coming into the network (inbound traffic). 
+
+4. `access = "Allow"`:  
+   - **Purpose**: To define the action that should be taken when the traffic matches the rule.
+   - **Goal**: Allows traffic that matches the conditions set in the rule (opposite would be `Deny`).
+
+5. `protocol = "Tcp"`:  
+   - **Purpose**: To specify the protocol to which this rule applies.
+   - **Goal**: Ensures that only TCP traffic is evaluated by this rule.
+
+6. `source_port_range = "*"`:  
+   - **Purpose**: To define the range of ports from which incoming traffic is allowed.
+   - **Goal**: Allows traffic from any source port. Useful for services where the client can connect from any port
+
+7. `destination_port_range = "80"`:  
+   - **Purpose**: To define the port on the destination (inbound) server that the rule applies to.
+   - **Goal**: Restricts the rule to only allow traffic destined for port 80, which is commonly used for HTTP traffic.
+
+8. `source_address_prefix = "*"`:  
+   - **Purpose**: To specify which source IP addresses are allowed by the rule.
+   - **Goal**: Allows traffic from any IP address. This is useful in scenarios where you don't want to restrict traffic based on the source.
+
+9. `destination_address_prefix = "*"`:  
+   - **Purpose**: To specify which destination IP addresses are covered by this rule.
+   - **Goal**: Applies the rule to any destination IP address, meaning any resource associated with the NSG can be reached by HTTP traffic from any source. 
+

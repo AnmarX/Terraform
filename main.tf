@@ -15,18 +15,73 @@ provider "azurerm" {
 
 # 3. Create a resource group
 resource "azurerm_resource_group" "test" {
-  name     = "test"
+  name     = "test-azure"
   location = "Qatar Central"
   tags = {
-    environment="dev"
+    environment = "dev"
   }
-  
+
 }
 
-# # 4. Create a virtual network within the resource group
-# resource "azurerm_virtual_network" "example" {
-#   name                = "example-network"
-#   resource_group_name = azurerm_resource_group.example.name
-#   location            = azurerm_resource_group.example.location
-#   address_space       = ["10.0.0.0/16"]
-# }
+
+# Create a virtual network
+resource "azurerm_virtual_network" "vnet" {
+  name                = "my-test-Vnet"
+  address_space       = ["10.15.20.224/28"]
+  location            = azurerm_resource_group.test.location
+  resource_group_name = azurerm_resource_group.test.name
+
+  tags = {
+    environment = "dev"
+  }
+}
+
+
+resource "azurerm_subnet" "firstSubnet" {
+  name                 = "first-subnet"
+  resource_group_name  = azurerm_resource_group.test.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = ["10.15.20.224/29"]
+}
+
+resource "azurerm_subnet" "secondSubnet" {
+  name                 = "second-subnet"
+  resource_group_name  = azurerm_resource_group.test.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = ["10.15.20.232/29"]
+}
+
+
+resource "azurerm_network_security_group" "my_security_group" {
+  name                = "my-security-groups-and-rules"
+  location            = azurerm_resource_group.test.location
+  resource_group_name = azurerm_resource_group.test.name
+
+  security_rule {
+    name                       = "first-rule"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*" # inbound that mean the source is from external request(api,user from the internet)
+    destination_port_range     = "*" # inbound azure resources are destination
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "second-rule"
+    priority                   = 101
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*" # Outbound that mean the source is from azure resources
+    destination_port_range     = "*" # Outbound that mean the destination is to external (api,user from the internet)
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  tags = {
+    environment = "dev"
+  }
+}
