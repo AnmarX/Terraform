@@ -27,7 +27,7 @@ resource "azurerm_resource_group" "test" {
 # Create a virtual network
 resource "azurerm_virtual_network" "vnet" {
   name                = "my-test-Vnet"
-  address_space       = ["10.15.20.224/28"]
+  address_space       = [var.addresss_space_Vnet]
   location            = azurerm_resource_group.test.location
   resource_group_name = azurerm_resource_group.test.name
 
@@ -41,14 +41,14 @@ resource "azurerm_subnet" "firstSubnet" {
   name                 = "first-subnet"
   resource_group_name  = azurerm_resource_group.test.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.15.20.224/29"]
+  address_prefixes     = [var.first_subnet]
 }
 
 resource "azurerm_subnet" "secondSubnet" {
   name                 = "second-subnet"
   resource_group_name  = azurerm_resource_group.test.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.15.20.232/29"]
+  address_prefixes     = [var.second_subnet]
 }
 
 
