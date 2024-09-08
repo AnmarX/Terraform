@@ -33,3 +33,10 @@ variable "local" {
   #   you can write the value here on the default or put the value on the .tfvars
   # default = "value"
 }
+
+variable "admin_user" {
+  description = "admin username for VM"
+  type        = string
+  #   you can write the value here on the default or put the value on the .tfvars
+  # default = "value"
+}
