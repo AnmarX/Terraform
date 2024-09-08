@@ -26,3 +26,10 @@ variable "second_subnet" {
   #   you can write the value here on the default or put the value on the .tfvars
   # default = "value"
 }
+
+variable "local" {
+  description = "local mahcine IP"
+  type        = string
+  #   you can write the value here on the default or put the value on the .tfvars
+  # default = "value"
+}

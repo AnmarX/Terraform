@@ -65,7 +65,7 @@ resource "azurerm_network_security_group" "my_security_group" {
     protocol                   = "*"
     source_port_range          = "*" # inbound that mean the source is from external request(api,user from the internet)
     destination_port_range     = "*" # inbound azure resources are destination
-    source_address_prefix      = "172.20.10.3"
+    source_address_prefix      = var.local
     destination_address_prefix = var.first_subnet
   }
 
