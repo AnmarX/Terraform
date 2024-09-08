@@ -91,7 +91,7 @@ resource "azurerm_network_security_group" "my_security_group" {
 
 
 resource "azurerm_network_interface" "vm_interface" {
-  name                = "example-nic"
+  name                = "vm-nic"
   location            = azurerm_resource_group.test.location
   resource_group_name = azurerm_resource_group.test.name
 
