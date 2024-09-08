@@ -62,18 +62,18 @@ resource "azurerm_network_security_group" "my_security_group" {
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
-    protocol                   = "Tcp"
+    protocol                   = "*"
     source_port_range          = "*" # inbound that mean the source is from external request(api,user from the internet)
     destination_port_range     = "*" # inbound azure resources are destination
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
+    source_address_prefix      = "172.20.10.3"
+    destination_address_prefix = var.first_subnet
   }
 
   security_rule {
     name                       = "second-rule"
     priority                   = 101
     direction                  = "Outbound"
-    access                     = "Allow"
+    access                     = "Deny"
     protocol                   = "Tcp"
     source_port_range          = "*" # Outbound that mean the source is from azure resources
     destination_port_range     = "*" # Outbound that mean the destination is to external (api,user from the internet)
