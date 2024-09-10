@@ -117,7 +117,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   name                = "azure-vm"
   resource_group_name = azurerm_resource_group.test.name
   location            = azurerm_resource_group.test.location
-  size                = "Standard_B1ls"
+  size                = "Standard_B1ls" # 1 CPU 0.5 RAM
   admin_username      = var.admin_user
   network_interface_ids = [
     azurerm_network_interface.vm_interface.id,
