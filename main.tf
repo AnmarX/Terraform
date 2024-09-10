@@ -88,7 +88,14 @@ resource "azurerm_network_security_group" "my_security_group" {
 
 
 
-
+# Create a public IP address for the VM
+resource "azurerm_public_ip" "vm_public_ip" {
+  name                = "vm-public-ip"
+  location            = azurerm_resource_group.test.location
+  resource_group_name = azurerm_resource_group.test.name
+  allocation_method   = "Dynamic" # Can be Static if you want a fixed IP
+  sku                 = "Basic"   # You can use "Standard" for better resiliency
+}
 
 resource "azurerm_network_interface" "vm_interface" {
   name                = "vm-nic"
@@ -99,6 +106,8 @@ resource "azurerm_network_interface" "vm_interface" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.firstSubnet.id
     private_ip_address_allocation = "Dynamic"
+    # Associate the Public IP with the NIC
+    public_ip_address_id = azurerm_public_ip.vm_public_ip.id
   }
 }
 
@@ -108,7 +117,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   name                = "azure-vm"
   resource_group_name = azurerm_resource_group.test.name
   location            = azurerm_resource_group.test.location
-  size                = "Standard_F2"
+  size                = "Standard_B1ls"
   admin_username      = var.admin_user
   network_interface_ids = [
     azurerm_network_interface.vm_interface.id,
@@ -121,7 +130,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+    storage_account_type = "StandardSSD_LRS"
+    # storage_account_type = "Standard_LRS"
   }
 
   source_image_reference {
