@@ -93,7 +93,7 @@ resource "azurerm_public_ip" "vm_public_ip" {
   name                = "vm-public-ip"
   location            = azurerm_resource_group.test.location
   resource_group_name = azurerm_resource_group.test.name
-  allocation_method   = "Dynamic" # Can be Static if you want a fixed IP
+  allocation_method   = "Static" # Can be Static if you want a fixed IP
   sku                 = "Basic"   # You can use "Standard" for better resiliency
 }
 
