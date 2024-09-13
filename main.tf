@@ -94,7 +94,7 @@ resource "azurerm_public_ip" "vm_public_ip" {
   location            = azurerm_resource_group.test.location
   resource_group_name = azurerm_resource_group.test.name
   allocation_method   = "Static" # Can be Static if you want a fixed IP
-  sku                 = "Basic"   # You can use "Standard" for better resiliency
+  sku                 = "Basic"  # You can use "Standard" for better resiliency
 }
 
 resource "azurerm_network_interface" "vm_interface" {
@@ -119,6 +119,9 @@ resource "azurerm_linux_virtual_machine" "vm" {
   location            = azurerm_resource_group.test.location
   size                = "Standard_B1ls" # 1 CPU 0.5 RAM
   admin_username      = var.admin_user
+
+  # if you have a script to run inside of the container
+  #custom_data = filebase64("customdata.tpl")
   network_interface_ids = [
     azurerm_network_interface.vm_interface.id,
   ]
@@ -140,4 +143,17 @@ resource "azurerm_linux_virtual_machine" "vm" {
     sku       = "22_04-lts"
     version   = "latest"
   }
+}
+
+# query data from exists resource from azure does not need to be on the same file
+# to add it use terraform apply -refresh-only
+data "azurerm_public_ip" "VM-ip" {
+  resource_group_name = azurerm_resource_group.test.name
+  name = azurerm_public_ip.vm_public_ip.name
+  
+}
+# just to write down output use commmand : terraform apply -refresh-only to apply it  
+# print it using terrform output
+output "public_ip_VM" {
+  value = "${azurerm_linux_virtual_machine.vm.name}:${data.azurerm_public_ip.VM-ip.ip_address}"
 }
