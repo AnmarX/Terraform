@@ -127,7 +127,9 @@ resource "azurerm_linux_virtual_machine" "vm" {
   ]
 
   admin_ssh_key {
-    username   = var.admin_user
+    username = var.admin_user
+    // is just a key to enter the VM if your are not using password
+    // how to ssh to the VM ssh -i ~/.ssh/id_rsa adminuser@<VM_PUBLIC_IP>
     public_key = file("~/.ssh/id_rsa.pub")
   }
 
@@ -149,8 +151,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
 # to add it use terraform apply -refresh-only
 data "azurerm_public_ip" "VM-ip" {
   resource_group_name = azurerm_resource_group.test.name
-  name = azurerm_public_ip.vm_public_ip.name
-  
+  name                = azurerm_public_ip.vm_public_ip.name
+
 }
 # just to write down output use commmand : terraform apply -refresh-only to apply it  
 # print it using terrform output

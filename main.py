@@ -9,7 +9,7 @@ def get_non_virtual_ip():
             continue
         
         for address in interface_addresses:
-            print(address)
+            # print(address)
             # Use socket.AF_INET to check for IPv4 addresses
             if address.family == socket.AF_INET:
                 return address.address
