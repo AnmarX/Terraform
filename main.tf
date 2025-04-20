@@ -42,6 +42,11 @@ resource "azurerm_subnet" "firstSubnet" {
   resource_group_name  = azurerm_resource_group.test.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = [var.first_subnet]
+
+}
+resource "azurerm_subnet_network_security_group_association" "example" {
+  subnet_id                 = azurerm_subnet.firstSubnet.id
+  network_security_group_id = azurerm_network_security_group.my_security_group.id
 }
 
 resource "azurerm_subnet" "secondSubnet" {
@@ -65,8 +70,10 @@ resource "azurerm_network_security_group" "my_security_group" {
     protocol                   = "*"
     source_port_range          = "*" # inbound that mean the source is from external request(api,user from the internet)
     destination_port_range     = "*" # inbound azure resources are destination
-    source_address_prefix      = var.local
-    destination_address_prefix = var.first_subnet
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+    # source_address_prefix      = var.local
+    # destination_address_prefix = var.first_subnet
   }
 
   security_rule {
